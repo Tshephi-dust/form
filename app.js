@@ -20,27 +20,39 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+// GET ELEMENTS
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const imageInput = document.getElementById("imageInput");
+const captionInput = document.getElementById("captionInput");
+
+const authBox = document.getElementById("authBox");
+const uploadBox = document.getElementById("uploadBox");
+const feed = document.getElementById("feed");
+
 // AUTH
 function signUp(){
   auth.createUserWithEmailAndPassword(email.value, password.value)
+    .then(() => alert("Account created ✅"))
     .catch(err => alert(err.message));
 }
 
 function login(){
   auth.signInWithEmailAndPassword(email.value, password.value)
+    .then(() => alert("Logged in ✅"))
     .catch(err => alert(err.message));
 }
 
 function logout(){
-  auth.signOut();
+  auth.signOut().then(() => alert("Logged out"));
 }
 
 // STATE
-const authBox = document.getElementById("authBox");
-const uploadBox = document.getElementById("uploadBox");
-const feed = document.getElementById("feed");
-
-auth.onAuthStateChanged(user => {
+firebase.auth().onAuthStateChanged(user => {
   if(user){
     authBox.style.display = "none";
     uploadBox.style.display = "block";
@@ -58,38 +70,55 @@ async function uploadPost(){
 
   if(!file) return alert("Select image");
 
-  const ref = storage.ref().child(Date.now()+file.name);
-  await ref.put(file);
-  const url = await ref.getDownloadURL();
+  try {
+    const ref = storage.ref().child(Date.now()+file.name);
+    await ref.put(file);
+    const url = await ref.getDownloadURL();
 
-  await db.collection("posts").add({
-    image: url,
-    caption: caption,
-    created: Date.now()
-  });
+    await db.collection("posts").add({
+      image: url,
+      caption: caption,
+      created: Date.now()
+    });
 
-  captionInput.value = "";
-  loadPosts();
+    captionInput.value = "";
+    imageInput.value = "";
+    loadPosts();
+  } catch(err) {
+    alert(err.message);
+  }
 }
 
 // LOAD POSTS
 async function loadPosts(){
-  feed.innerHTML = "";
+  feed.innerHTML = "Loading...";
 
-  const snapshot = await db.collection("posts")
-    .orderBy("created","desc")
-    .get();
+  try {
+    const snapshot = await db.collection("posts")
+      .orderBy("created","desc")
+      .get();
 
-  snapshot.forEach(doc => {
-    const post = doc.data();
+    feed.innerHTML = "";
 
-    const div = document.createElement("div");
-    div.className = "post";
+    snapshot.forEach(doc => {
+      const post = doc.data();
 
-    div.innerHTML = `
-      <img src="${post.image}">
-      <p>${post.caption}</p>
-    `;
+      const div = document.createElement("div");
+      div.className = "post";
+
+      div.innerHTML = `
+        <img src="${post.image}">
+        <p>${post.caption}</p>
+      `;
+
+      feed.appendChild(div);
+    });
+
+  } catch(err) {
+    feed.innerHTML = "Error loading posts";
+    console.error(err);
+  }
+}
 
     feed.appendChild(div);
   });
