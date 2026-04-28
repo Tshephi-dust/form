@@ -1,7 +1,24 @@
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-const storage = firebase.storage();
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAn5P-JUEOtMENzobvzkn8H0idvOMpLf_4",
+  authDomain: "dust14.firebaseapp.com",
+  projectId: "dust14",
+  storageBucket: "dust14.firebasestorage.app",
+  messagingSenderId: "368154085876",
+  appId: "1:368154085876:web:346af2e31e8eecfe8b11a1",
+  measurementId: "G-E984NRK8V1"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 // AUTH
 function signUp(){
