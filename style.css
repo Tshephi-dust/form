@@ -1,6 +1,4 @@
-.post p {
-  padding: 10px;
-}body {
+body {
   margin: 0;
   font-family: Arial;
   background: #ffe6f0;
@@ -31,6 +29,9 @@ header {
 .post img {
   width: 100%;
 }
+.post p {
+  padding: 10px;
+}
 button {
   background: #ff4da6;
   color: white;
@@ -44,3 +45,4 @@ input {
   padding: 8px;
   margin: 5px 0;
 }
+
