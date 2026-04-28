@@ -18,22 +18,22 @@
 
 <body>
 
-<header class="header">
+<header>
   <h1>🖤 Dust Collection</h1>
 
-  <input id="search" placeholder="Search clothes..." oninput="filterProducts()">
+  <input id="search" placeholder="Search fashion..." oninput="filterProducts()">
 
-  <div class="nav">
-    <a onclick="filterCategory('all')">All</a>
-    <a onclick="filterCategory('hoodie')">Hoodies</a>
-    <a onclick="filterCategory('shirt')">T-Shirts</a>
-    <a onclick="filterCategory('pants')">Pants</a>
+  <div class="categories">
+    <button onclick="filter('all')">All</button>
+    <button onclick="filter('hoodie')">Hoodies</button>
+    <button onclick="filter('shirt')">T-Shirts</button>
+    <button onclick="filter('pants')">Pants</button>
   </div>
 
-  <div class="cart-btn" onclick="toggleCart()">
-    🛒 <span id="cartCount">0</span>
-  </div>
+  <div onclick="toggleCart()">🛒 <span id="cartCount">0</span></div>
 </header>
+
+<section id="products"></section>
 
 <section class="hero">
   <h2>NEW DROP 🔥</h2>
