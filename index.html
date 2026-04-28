@@ -34,6 +34,40 @@
 </header>
 
 <section id="products"></section>
+import { db } from "./firebase.js";
+import { collection, onSnapshot } from "firebase/firestore";
+
+let allProducts = [];
+
+onSnapshot(collection(db, "products"), (snap) => {
+  allProducts = snap.docs.map(d => ({id: d.id, ...d.data()}));
+  render(allProducts);
+});
+
+function render(list){
+  const box = document.getElementById("products");
+  box.innerHTML = "";
+
+  list.forEach(p => {
+    box.innerHTML += `
+      <div class="card">
+        <img src="${p.image}" />
+        <h3>${p.name}</h3>
+        <p>P${p.price}</p>
+        <button onclick="addCart('${p.id}')">Add</button>
+        <button onclick="wishlist('${p.id}')">❤</button>
+      </div>
+    `;
+  });
+}
+  import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { auth, db } from "./firebase.js";
+
+function wishlist(id){
+  updateDoc(doc(db, "users", auth.currentUser.uid), {
+    wishlist: arrayUnion(id)
+  });
+}
 
 <section class="hero">
   <h2>NEW DROP 🔥</h2>
