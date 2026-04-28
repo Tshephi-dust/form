@@ -98,6 +98,12 @@ function wishlist(id){
   <p>Total: P<span id="total">0</span></p>
   <button onclick="checkout()">Checkout</button>
   <button onclick="toggleCart()">Close</button>
+  let cart = [];
+
+function addCart(id){
+  cart.push(id);
+  document.getElementById("cartCount").innerText = cart.length;
+}
 </div>
 
 </body>
