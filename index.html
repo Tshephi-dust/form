@@ -57,6 +57,21 @@ function render(list){
         <button onclick="addCart('${p.id}')">Add</button>
         <button onclick="wishlist('${p.id}')">❤</button>
       </div>
+  import Stripe from "stripe";
+const stripe = new Stripe("SECRET_KEY");
+
+app.post("/checkout", async (req,res)=>{
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types:["card"],
+    line_items:req.body.items,
+    mode:"payment",
+    success_url:"https://yourapp.com/success",
+    cancel_url:"https://yourapp.com/cancel"
+  });
+
+  res.json({url: session.url});
+});
     `;
   });
 }
